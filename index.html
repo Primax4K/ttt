@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div.row
+        {
+            width:7em;
+            margin:auto;
+            user-select: none;
+        }
+        div.field
+        {
+            text-align: center;
+            height: 2em;
+            width: 2em;
+            border: 1px solid black;
+            display: inline-block;
+            vertical-align:top; /*Wichtig, damit sich Box nicht nach oben/unten verschiebt, wenn ein x/o eingefügt wird! */
+            cursor: pointer; /* Damit der Mauszeiger zu einem Pointer wird */
+            user-select: none; /* Damit man nicht die Zeichen markieren kann */
+            margin-bottom: 0.2em; /* Gleicher Abstand zu allen Seiten */
+        }
+
+        .container{
+            text-align: center;
+            margin-top: 4em;
+        }
+
+        #clearField{
+            color: #494949;
+            text-transform: uppercase;
+            text-decoration: none;
+            background: #ffffff;
+            padding: 20px;
+            border: 4px solid #494949;
+            display: inline-block;
+            transition: all 0.4s ease 0s;
+        }
+        #clearField:hover{
+            color: #ffffff;
+            background: #F44336;
+            border-color: #F44336;
+            transition: all 0.4s ease 0s;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="field">
+        </div>
+        <div class="field">
+        </div>
+        <div class="field">
+        </div>
+    </div>
+    <div class="row">
+        <div class="field">
+        </div>
+        <div class="field">
+        </div>
+        <div class="field">
+        </div>
+    </div>
+    <div class="row">
+        <div class="field">
+        </div>
+        <div class="field">
+        </div>
+        <div class="field">
+        </div>
+    </div>
+    <div class="container">
+        <button id="clearField">Clear</button>
+    </div>
+
+
+    <script>
+        document.getElementById("clearField").addEventListener("click", ClearField);
+        let x = true;
+        let canPlay = true;
+        let winPositions = new Array(8);
+        winPositions[0] = [0,1,2];
+        winPositions[1] = [3,4,5];
+        winPositions[2] = [6,7,8];
+        winPositions[3] = [1,4,7];
+        winPositions[4] = [2,5,8];
+        winPositions[5] = [2,4,6];
+        winPositions[6] = [0,4,8];
+        winPositions[7] = [0,3,6]; //Alle Win-Kombinationen
+
+        function ClearField(){ //Funktion um das Feld zu clearen. Der Verlierer fängt danach an.
+            for(let i = 0; i < 9; i++){
+                document.getElementsByClassName("field")[i].innerHTML = "";
+                document.getElementsByClassName("field")[i].style.backgroundColor = null;
+            }
+            canPlay = true;
+        }
+
+        function Checkwinner(){
+            for(let k = 0; k < 8; k++){
+                if(document.getElementsByClassName("field")[winPositions[k][0]].innerHTML === "x" &&
+                    document.getElementsByClassName("field")[winPositions[k][1]].innerHTML === "x" &&
+                    document.getElementsByClassName("field")[winPositions[k][2]].innerHTML === "x"){
+
+                    //change color on win
+                    document.getElementsByClassName("field")[winPositions[k][0]].style.backgroundColor = "#46ff00";
+                    document.getElementsByClassName("field")[winPositions[k][1]].style.backgroundColor = "#46ff00";
+                    document.getElementsByClassName("field")[winPositions[k][2]].style.backgroundColor = "#46ff00";
+
+                    canPlay = !canPlay;
+                    break;
+                }
+                if(document.getElementsByClassName("field")[winPositions[k][0]].innerHTML === "o" &&
+                    document.getElementsByClassName("field")[winPositions[k][1]].innerHTML === "o" &&
+                    document.getElementsByClassName("field")[winPositions[k][2]].innerHTML === "o"){
+
+                    //change color on win
+                    document.getElementsByClassName("field")[winPositions[k][0]].style.backgroundColor = "#46ff00";
+                    document.getElementsByClassName("field")[winPositions[k][1]].style.backgroundColor = "#46ff00";
+                    document.getElementsByClassName("field")[winPositions[k][2]].style.backgroundColor = "#46ff00";
+
+                    canPlay = !canPlay;
+                    break;
+                }
+            }
+        }
+
+        for(let i = 0; i < 9; i++){
+            document.getElementsByClassName("field")[i].addEventListener("click", function() {
+                if(this.innerHTML !== "x" && this.innerHTML !== "o"){
+                    if(canPlay){
+                        if(x){
+                            this.innerHTML = "x";
+                            Checkwinner();
+                            x = !x;
+                        } else {
+                            this.innerHTML = "o";
+                            Checkwinner();
+                            x = !x;
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
